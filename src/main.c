@@ -77,6 +77,8 @@ t_rp		*init_rp(void)
 	rp->flag = 0;
 	rp->line_shift = 0;
 	rp->history = create_history("");
+	rp()->ws_col = ret_winsize(0);
+	rp()->ws_row = ret_winsize(1);
 	return (rp);
 }
 

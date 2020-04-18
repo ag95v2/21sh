@@ -39,7 +39,9 @@ typedef struct          s_rp
     int                 cur_pos[2];
     char                flag;
     int                 line_shift;
-    t_history           *history;  
+    t_history           *history;
+    unsigned short      ws_col;
+    unsigned short      ws_row;
 }                       t_rp;
 
 /*

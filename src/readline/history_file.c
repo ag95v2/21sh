@@ -11,8 +11,7 @@ static int  open_21sh_history(int mode)
     if (!(file_path = ft_strjoin(home_dir, "/.21sh_history")))
         return (-1);
     fd = open(file_path, mode, __S_IREAD | __S_IWRITE);
-    if (file_path)
-        free(file_path);
+    free(file_path);
     return (fd);
 }
 
@@ -66,8 +65,7 @@ void        save_in_file_history(t_history *history)
     int     fd;
     int     n;
 
-    fd = open_21sh_history(O_WRONLY | O_TRUNC | O_CREAT);
-    if (fd == -1)
+    if ((fd = open_21sh_history(O_WRONLY | O_TRUNC | O_CREAT)) < 0)
         return ;
     while (history->prev)
         history = history->prev;

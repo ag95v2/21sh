@@ -5,24 +5,6 @@ int			ft_putint(int c)
 	return (write(STDERR_FILENO, &c, 1));
 }
 
-void		set_input_mode()
-{
-	struct termios	new_settings;
-
-	tcgetattr(STDIN_FILENO, &g_saved_attribute);
-	new_settings = g_saved_attribute;
-	new_settings.c_lflag &= ~ICANON;
-	new_settings.c_lflag &= ~ECHO;
-	new_settings.c_cc[VTIME] = 0;
-	new_settings.c_cc[VMIN] = 1;
-	tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
-}
-
-void	    reset_input_mode()
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &g_saved_attribute);
-}
-
 void		test_tokenizing(char *user_in)
 {
 	TOKEN	token;
@@ -48,9 +30,14 @@ void		init_terminal()
     char			*termtype;
 
 	termtype = getenv("TERM");
-	if (termtype == NULL || tgetent(NULL, termtype) != 1)
+	if (!termtype)
 	{
-		ft_putstr_fd("error\n", STDERR_FILENO);
+		ft_putstr_fd("error\n", STDERR_FILENO); // Вывести соответствующее сообщение
+		exit(1);
+	}
+	if (tgetent(NULL, termtype) != 1)
+	{
+		ft_putstr_fd("error\n", STDERR_FILENO); // Вывести соответствующее сообщение
 		exit(1);
     }
     set_input_mode();
@@ -60,57 +47,10 @@ int			ret_winsize(int a)
 {
 	struct winsize	w;
 
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	ioctl(STDERR_FILENO, TIOCGWINSZ, &w);
 	if (a == 0)
 		return (w.ws_col);
 	return (w.ws_row);
-}
-
-/*
-** Функция для обработки сигналов.
-*/
-
-void		signal_processing(int signal_code)
-{
-	size_t	user_in_lines;
-
-	if (signal_code == SIGINT)
-	{
-		write(STDERR_FILENO, "^C", 2);
-		user_in_lines = str_n(rp()->user_in) + 2 - rp()->cur_pos[1];
-		while (user_in_lines-- > 0)
-			write(STDERR_FILENO, "\n", 1);
-		rp()->user_in -= rp()->line_shift;
-		write(STDERR_FILENO, "$>", 2);
-		reset_rp_to_start();
-	}
-}
-
-void		set_signal(void)
-{
-	signal(SIGINT, signal_processing);
-}
-
-void		back_to_start_history_rp(void)
-{
-	if (rp()->history)
-		while (rp()->history->prev)
-			rp()->history = rp()->history->prev;
-}
-
-void		reset_cur_pos_rp(void)
-{
-	rp()->cur_pos[0] = START_COL_POS;
-	rp()->cur_pos[1] = START_ROW_POS;
-}
-
-void		reset_rp_to_start(void)
-{
-	back_to_start_history_rp();
-	reset_cur_pos_rp();
-	rp()->user_in[0] = 0;
-	rp()->line_shift = 0;
-	rp()->flag = 0;
 }
 
 t_rp		*readline_position(t_rp *change_rp)
@@ -132,7 +72,6 @@ t_rp		*init_rp(void)
 		exit(1);
 	if (!(rp->user_in = (char*)malloc(sizeof(char) * MAX_CMD_LENGTH)))
 		exit(1);
-	rp->index = 0;
 	rp->cur_pos[0] = START_COL_POS;
 	rp->cur_pos[1] = START_ROW_POS;
 	rp->flag = 0;
@@ -159,10 +98,8 @@ void        start_program(char **env, int tty_input)
 		free(user_in);
 	}
 	free(user_in);
-	free(rp()->user_in);
 	save_in_file_history(rp()->history);
-	free_history_list(rp()->history);
-	free(rp());
+	free_readline_position();
 }
 
 int         main(int ac, char **av, char **environ)

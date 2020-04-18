@@ -35,7 +35,6 @@ typedef struct          s_history
 typedef struct          s_rp
 {
     char                *user_in;
-    int                 index;
     int                 count_lines;
     int                 cur_pos[2];
     char                flag;
@@ -135,18 +134,16 @@ int			ft_putint(int c);
 char        *readline(int tty_input);
 int			ft_isspace(char c);
 void        move_cursor(long c);
-void        clear_line(int end_cl);
 void        delete_symbol(void);
-void        insert_symbol(char c);
+void        add_symbol(char c);
 void        alt_left_right(long c);
-void		home_end(long c);
 void        delete_last_word(void);
 void		wordmove_cursor(long c);
 void		delete_symbol_forward(void);
 int         str_n(char *user_in);
 void        clear_all_line(void);
 void        cur_pos_after_putstr(int *cur_pos);
-int         last_cur_pos(void);
+int         search_last_cur_pos_in_line(void);
 int         search_index(void);
 void        ret_cur_to_original_pos(int *prev_cur_pos);
 int			ret_winsize(int a);
@@ -157,7 +154,13 @@ void        add_to_start_history(t_history *history, char *str);
 t_history   *create_history(char *str);
 void        load_on_file_history(t_history *history);
 void        save_in_file_history(t_history *history);
-void        free_history_list(t_history *history);
+void        free_readline_position(void);
+void        check_flag(char *user_in, char *flag);
+void        up_down_arrow(long c);
+void		set_signal(void);
+void		set_input_mode(void);
+void	    reset_input_mode(void);
+void		reset_rp_to_start(void);
 
 TOKEN       get_next_token(char *user_in);
 TOKEN       get_token_word(char *user_in, int *index, char *buf,\

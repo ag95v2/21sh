@@ -1,6 +1,6 @@
 #include "21sh.h"
 
-void        free_history_list(t_history *history)
+static void free_history_list(t_history *history)
 {
     if (!history)
         return ;
@@ -14,4 +14,11 @@ void        free_history_list(t_history *history)
     }
     free(history->str);
     free(history);
+}
+
+void        free_readline_position(void)
+{
+	free(rp()->user_in);
+	free_history_list(rp()->history);
+	free(rp());
 }

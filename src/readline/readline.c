@@ -83,7 +83,7 @@ static void readline_quoting(int tty)
 		write(STDERR_FILENO, "> ", 2);
 	}
 	read_till_newline(&user_in_len, tty);
-	user_in_lines = str_n(rp()->user_in) - rp()->cur_pos[1];
+	user_in_lines = str_n() - rp()->cur_pos[1];
 	while (user_in_lines-- > 0)
 		write(STDERR_FILENO, "\n", 1);
 	check_flag(rp()->user_in, &(rp()->flag));
@@ -108,7 +108,7 @@ char        *readline(int tty_input)
     int     user_in_lines;
 
 	read_till_newline(&user_in_len, tty_input);
-	user_in_lines = str_n(rp()->user_in) - rp()->cur_pos[1];
+	user_in_lines = str_n() - rp()->cur_pos[1];
 	while (user_in_lines-- > 0)
 		write(STDERR_FILENO, "\n", 1);
 	check_flag(rp()->user_in, &(rp()->flag));

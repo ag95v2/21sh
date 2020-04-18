@@ -19,13 +19,17 @@ void        clear_all_line(void)
 {
     int n;
 
-    if (ft_strchr(rp()->user_in, '\n') == NULL)
+    n = str_n() + 1;
+    if (n == 1)
     {
         clear_line(3);
         rp()->cur_pos[0] = 3;
         return ;
     }
-    n = str_n(rp()->user_in) + 1;
+    //if (n == 2)
+    //    printf("2\n");
+    while (rp()->cur_pos[0] != 1)
+        tc_cursor_left();
     while (rp()->cur_pos[1] != n)
         tc_cursor_down();
     while (rp()->cur_pos[1] > 1)

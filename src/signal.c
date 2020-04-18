@@ -11,7 +11,7 @@ void		signal_processing(int signal_code)
 	if (signal_code == SIGINT)
 	{
 		write(STDERR_FILENO, "^C", 2);
-		user_in_lines = str_n(rp()->user_in) + 2 - rp()->cur_pos[1];
+		user_in_lines = str_n() + 2 - rp()->cur_pos[1];
 		while (user_in_lines-- > 0)
 			write(STDERR_FILENO, "\n", 1);
 		rp()->user_in -= rp()->line_shift;

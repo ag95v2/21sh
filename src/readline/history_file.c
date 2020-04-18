@@ -60,6 +60,20 @@ static void save_in_file_history_sup(int fd, int n, char *history)
     write(fd, "\n", 1);
 }
 
+static int  str_naa(char *user_in)
+{
+    int n;
+
+    n = 0;
+    while (*user_in != 0)
+    {
+        if (*user_in == '\n')
+            n++;
+        user_in++;
+    }
+    return (n);
+}
+
 void        save_in_file_history(t_history *history)
 {
     int     fd;
@@ -73,7 +87,7 @@ void        save_in_file_history(t_history *history)
     while (history->next && n < HISTSIZE)
     {
         history = history->next;
-        n += str_n(history->str) + 1;
+        n += str_naa(history->str) + 1;
     }
     if (n > HISTSIZE)
     {

@@ -4,15 +4,21 @@ int         search_index(void)
 {
     int     n;
     int     i;
+    int     cur_pos_col;
 
     n = 1;
     i = 0;
     if (rp()->cur_pos[1] == 1)
         return (rp()->cur_pos[0] - 3);
+    cur_pos_col = 3;
     while (n < rp()->cur_pos[1])
     {
-        if (rp()->user_in[i] == '\n')
+        if (rp()->user_in[i] == '\n' || cur_pos_col >= rp()->ws_col)
+        {
+            cur_pos_col = 0;
             n++;
+        }
+        cur_pos_col++;
         i++;
     }
     n = 1;
@@ -82,15 +88,39 @@ int			ft_isspace(char c)
 
 //----------------------------------
 
-int         str_n(char *user_in)
-{
-    int n;
+/*
+** Возвращает количество строк, занимаемых в терминале,
+** командой (rp()->user_in).
+*/
 
+int         str_n(void)
+{
+    char            *user_in;
+    int             n;
+    unsigned short  cur_pos_col;
+
+    user_in = rp()->user_in;
     n = 0;
-    while (*user_in != 0)
+    cur_pos_col = 3;
+    while (*user_in && *user_in != '\n' && cur_pos_col < rp()->ws_col)
     {
-        if (*user_in == '\n')
+        cur_pos_col++;
+        user_in++;
+    }
+    if (*user_in == '\n' || cur_pos_col >= rp()->ws_col)
+    {
+        n++;
+        user_in++;
+    }
+    cur_pos_col = 1;
+    while (*user_in)
+    {
+        if (*user_in == '\n' || cur_pos_col >= rp()->ws_col)
+        {
+            cur_pos_col = 1;
             n++;
+        }
+        cur_pos_col++;
         user_in++;
     }
     return (n);
@@ -102,6 +132,11 @@ void        up_down_arrow_sup(void)
     ft_strcpy(rp()->user_in, rp()->history->str);
     ft_putstr(rp()->user_in);
     cur_pos_after_putstr(rp()->cur_pos);
+    if (rp()->cur_pos[1] > 1)
+    {
+        //printf("rp()->cur_pos[0] = %d, rp()->cur_pos[1] = %d\n", rp()->cur_pos[0], rp()->cur_pos[1]);
+        clear_all_line();
+    }
 }
 
 void        up_down_arrow(long c)

@@ -10,28 +10,38 @@ int         search_last_cur_pos_in_line(void)
     int z;
     int p;
     int y;
+    int cur_pos_col;
 
     z = 1;
     p = 0;
+    cur_pos_col = 3;
     while (z != rp()->cur_pos[1])
     {
-        if (rp()->user_in[p] == '\n')
+        if (rp()->user_in[p] == '\n' || cur_pos_col > rp()->ws_col)
+        {
+            cur_pos_col = 0;
             z++;
+        }
+        cur_pos_col++;
         p++;
     }
     y = 0;
-    while (rp()->user_in[p] != '\n')
+    cur_pos_col = 1;
+    if (rp()->cur_pos[1] == 1)
+        cur_pos_col = 3;
+    while (rp()->user_in[p] != '\n' && cur_pos_col < rp()->ws_col - 1)
     {
+        cur_pos_col++;
         p++;
         y++;
     }
-    if (rp()->cur_pos[1] == 1)
-        return (y + 2);
-    return (y);
+    if (rp()->user_in[p] == '\n')
+        cur_pos_col--;
+    return (cur_pos_col);
 }
 
 /*
-** Ищет и записывает в указатель cur_pos позицию
+** Записывает в указатель cur_pos позицию
 ** курсора после вывода строки (rp()->user_in).
 */
 
@@ -39,25 +49,31 @@ void        cur_pos_after_putstr(int *cur_pos)
 {
     int i;
     int n;
+    int cur_pos_col;
 
-    cur_pos[1] = str_n(rp()->user_in) + 1;
-    if (ft_strchr(rp()->user_in, '\n') == NULL)
+    cur_pos[1] = str_n() + 1;
+    if (cur_pos[1] == 1)
         cur_pos[0] = ft_strlen(rp()->user_in) + 3;
     else
     {
-        cur_pos[0] = 1;
+        cur_pos_col = 1;
         i = 0;
         n = cur_pos[1] - 1;
-        while (n != 0)
+        if (n == 1)
+            cur_pos_col = 3;
+        while (n)
         {
-            if (rp()->user_in[i] == '\n')
+            if (rp()->user_in[i++] == '\n' || cur_pos_col >= rp()->ws_col)
+            {
+                cur_pos_col = 1;
                 n--;
-            i++;
+            }
+            cur_pos_col++;
         }
-        while (rp()->user_in[i] != 0)
-        {
+        cur_pos[0] = 1;
+        while (rp()->user_in[i++])
             cur_pos[0]++;
-            i++;
-        }
     }
+    //if (cur_pos[1] > 1)
+    //    printf("cur_pos[0] = %d, cur_pos[1] = %d\n", cur_pos[0], cur_pos[1]);
 }

@@ -21,6 +21,13 @@ void        add_symbol(char c)
     rp()->cur_pos[0] = tmp[0] + 1;
     rp()->cur_pos[1] = tmp[1];
     ft_putstr_fd(rp()->user_in, STDERR_FILENO);
+    if (rp()->cur_pos[0] == rp()->ws_col)
+    {
+        rp()->cur_pos[0] = 1;
+        rp()->cur_pos[1]++;
+        //write(STDERR_FILENO, "\n", 1);
+        //printf("rp()->cur_pos[0] = %d, rp()->cur_pos[1] = %d\n", rp()->cur_pos[0], rp()->cur_pos[1]);
+    }
     cur_pos_after_putstr(tmp);
     ret_cur_to_original_pos(tmp);
 }

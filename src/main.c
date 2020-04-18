@@ -1,4 +1,5 @@
 #include "21sh.h"
+#include <errno.h>
 
 int			ft_putint(int c)
 {
@@ -48,7 +49,7 @@ int			ret_winsize(int a)
 	struct winsize	w;
 
 	ioctl(STDERR_FILENO, TIOCGWINSZ, &w);
-	if (a == 0)
+	if (!a)
 		return (w.ws_col);
 	return (w.ws_row);
 }
@@ -77,8 +78,8 @@ t_rp		*init_rp(void)
 	rp->flag = 0;
 	rp->line_shift = 0;
 	rp->history = create_history("");
-	rp()->ws_col = ret_winsize(0);
-	rp()->ws_row = ret_winsize(1);
+	rp->ws_col = ret_winsize(0);
+	rp->ws_row = ret_winsize(1);
 	return (rp);
 }
 

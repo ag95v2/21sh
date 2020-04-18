@@ -142,7 +142,7 @@ void        alt_left_right(long c);
 void        delete_last_word(void);
 void		wordmove_cursor(long c);
 void		delete_symbol_forward(void);
-int         str_n(char *user_in);
+int         str_n(void);
 void        clear_all_line(void);
 void        cur_pos_after_putstr(int *cur_pos);
 int         search_last_cur_pos_in_line(void);

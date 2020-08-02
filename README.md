@@ -14,6 +14,7 @@ make
 Use it like your favourite shell. 
 Should be intuitive.
 
+
 # Features:
 
 - Partial implemenation of GNU readline using termcaps (Unstable on some terminal emulators). 
@@ -28,3 +29,12 @@ Should be intuitive.
 - Works stable in interactive / non-interactive mode
 - Automatic tests
 - Implementation of huge part of libc (for educational purposes)
+
+
+# Authors:
+
+This is an educatioinal group project of me and Tsorion9 (https://github.com/Tsorion9). 
+
+Roles:
+- readline, lexer - Tsorion9
+- parser, exec - me

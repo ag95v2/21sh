@@ -25,3 +25,5 @@ Should be intuitive.
 - History management (no search)
 - Expansions ~ $ (simple)
 - Almost POSIX-compliant (subset of) grammar
+- Works stable in interactive / non-interactive mode
+- Automatic tests

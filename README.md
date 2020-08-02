@@ -27,3 +27,4 @@ Should be intuitive.
 - Almost POSIX-compliant (subset of) grammar
 - Works stable in interactive / non-interactive mode
 - Automatic tests
+- Implementation of huge part of libc (for educational purposes)
